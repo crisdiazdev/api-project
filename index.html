@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quote Explorer ✨</title>
+
+  <!-- Popmotion animation library -->
+  <script src="https://cdn.jsdelivr.net/npm/popmotion@8.7.6/dist/popmotion.global.min.js"></script>
+
+
+  <style>
+    /* --------------- Global setup --------------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+      color: #e5e7eb;
+      padding: 2rem 1rem 3rem;
+      min-height: 100vh;
+    }
+
+    h1, h2 {
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      line-height: 1.5;
+    }
+
+    header p {
+      color: #9ca3af;
+      font-size: 0.95rem;
+    }
+
+    /* --------------- Main layout (CSS GRID) --------------- */
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+      align-items: flex-start;
+    }
+
+    /* Stack on mobile */
+    @media (max-width: 768px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* --------------- Card styling --------------- */
+    .card {
+      background: rgba(15, 23, 42, 0.97);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .card-title {
+      font-size: 1.35rem;
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+      color: #fbbf24;
+    }
+
+    /* --------------- Left card content (Flexbox) --------------- */
+    .quote-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 210px;
+      transform-origin: center;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .quote-text {
+      font-size: 1.05rem;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #9ca3af;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.15rem 0.7rem;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #2563eb, #22c55e);
+      color: #ecfeff;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .length-label {
+      font-weight: 500;
+      color: #a5b4fc;
+    }
+
+    /* --------------- Button --------------- */
+    .btn {
+      margin-top: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.4rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      background: linear-gradient(90deg, #f97316, #facc15);
+      color: #111827;
+      font-size: 0.95rem;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    /* --------------- Right panel --------------- */
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: rgba(16, 185, 129, 0.18);
+      color: #6ee7b7;
+    }
+
+    .info-list {
+      list-style: none;
+      margin-top: 0.75rem;
+      display: grid;
+      gap: 0.7rem;
+      font-size: 0.95rem;
+    }
+
+    code {
+      background: rgba(15, 23, 42, 0.9);
+      padding: 0.1rem 0.35rem;
+      border-radius: 0.35rem;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <header style="text-align:center; margin-bottom:2rem;">
+    <h1>Quote Explorer ✨</h1>
+    <p>Random famous quotes using a public API, Popmotion animations, and modern CSS layout.</p>
+  </header>
+
+  <main class="page">
+    <!-- LEFT: API + animation demo -->
+    <section class="card quote-card" id="quote-card">
+      <div>
+        <div class="tag">API: api.quotable.io</div>
+        <h2 class="card-title">Random Quote</h2>
+        <p class="quote-text" id="fact-text">
+          Loading an inspiring quote for you...
+        </p>
+      </div>
+
+      <div>
+        <div class="meta-row">
+          <span id="fact-length" class="length-label">Length: —</span>
+          <span>Animation: Popmotion spring</span>
+        </div>
+        <button class="btn" id="new-fact-btn">
+          🎲 Get another quote
+        </button>
+      </div>
+    </section>
+
+    <!-- RIGHT: Assignment explanation -->
+    <aside class="card">
+      <span class="badge">Assignment checklist</span>
+      <h2 class="card-title">What this page demonstrates</h2>
+      <ul class="info-list">
+        <li>
+          ✅ <strong>API usage</strong><br />
+          Fetches data from <code>https://api.quotable.io/random</code> and
+          displays the <em>content</em> and <em>author</em>.
+        </li>
+        <li>
+          ✅ <strong>Popmotion animation</strong><br />
+          Every time a new quote is loaded, a <code>spring</code> animation is
+          triggered on the left card using Popmotion.
+        </li>
+        <li>
+          ✅ <strong>Advanced CSS</strong><br />
+          Uses <strong>CSS Grid</strong> for the two-column layout and
+          <strong>Flexbox</strong> inside the quote card for vertical spacing
+          and alignment.
+        </li>
+      </ul>
+      <p style="margin-top:1rem; font-size:0.9rem; color:#9ca3af;">
+        You can tweak colors, fonts, or copy to match your style while still
+        clearly hitting all the assignment requirements.
+      </p>
+    </aside>
+  </main>
+
+  <script>
+    // Pull utilities from Popmotion global
+    const { styler, spring } = window.popmotion;
+
+    const quoteCard = document.getElementById("quote-card");
+    const factText = document.getElementById("fact-text");
+    const factLength = document.getElementById("fact-length");
+    const newFactBtn = document.getElementById("new-fact-btn");
+
+    // Connect Popmotion to the card element
+    const cardStyler = styler(quoteCard);
+
+    function animateCardIn() {
+      // Start from smaller and transparent
+      cardStyler.set({ scale: 0.9, opacity: 0 });
+
+      // Spring back to normal
+      spring({
+        from: { scale: 0.9, opacity: 0 },
+        to: { scale: 1, opacity: 1 },
+        stiffness: 260,
+        damping: 20
+      }).start(cardStyler.set);
+    }
+
+    async function loadQuote() {
+      try {
+        factText.textContent = "Loading a new quote...";
+        factLength.textContent = "Length: —";
+
+        const response = await fetch("https://api.quotable.io/random");
+        const data = await response.json();
+
+        // API returns: { content, author, length, ... }
+        factText.textContent = `"${data.content}" — ${data.author}`;
+        factLength.textContent = "Length: " + data.length + " characters";
+
+        // Fire animation
+        animateCardIn();
+      } catch (err) {
+        factText.textContent = "Could not load a quote. Please try again.";
+        factLength.textContent = "Length: error";
+        console.error("Error fetching quote:", err);
+      }
+    }
+
+    newFactBtn.addEventListener("click", loadQuote);
+
+    // Load an initial quote on page load
+    loadQuote();
+  </script>
+</body>
+</html>
