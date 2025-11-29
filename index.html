@@ -4,111 +4,186 @@
   <meta charset="UTF-8" />
   <title>Dad Joke Generator 🤣</title>
 
+  <!-- fonts  -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
   <!-- Popmotion animation -->
   <script src="https://cdn.jsdelivr.net/npm/popmotion@8.7.6/dist/popmotion.global.min.js"></script>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: system-ui, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      padding: 2rem;
+      margin: 0;
+      padding: 2.5rem 1.5rem 3rem;
       min-height: 100vh;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f3f4f6; /* light gray */
+      color: #111827;
+      display: flex;
+      justify-content: center;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 900px;
     }
 
     h1 {
+      font-size: clamp(2rem, 3vw, 2.4rem);
+      margin: 0 0 0.5rem;
       text-align: center;
-      margin-bottom: 1rem;
-      font-size: 2.2rem;
     }
 
+    .subtitle {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 2rem;
+    }
+
+    /* Main layout with CSS Grid */
     .page {
-      max-width: 900px;
-      margin: auto;
       display: grid;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
       gap: 1.5rem;
+      align-items: normal;
     }
 
     @media (max-width: 768px) {
+      body {
+        padding: 2rem 1.25rem 2.5rem;
+      }
+
       .page {
         grid-template-columns: 1fr;
       }
     }
 
     .card {
-      background: #1e293b;
-      padding: 1.5rem;
-      border-radius: 1rem;
-      border: 1px solid rgba(255,255,255,0.15);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+      background: #ffffff;
+      border-radius: 0.75rem;
+      border: 1px solid #e5e7eb;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
     }
 
     .joke-card {
-      display: flex;
+      display: flex;              /* flexbox inside grid item */
       flex-direction: column;
-      justify-content: space-between;
-      gap: 1rem;
-      transform-origin: center;
-    }
-
-    .btn {
-      background: linear-gradient(90deg,#f97316,#facc15);
-      border: none;
-      padding: 0.7rem 1rem;
-      border-radius: 999px;
-      cursor: pointer;
-      font-weight: bold;
-      color: #111;
-      font-size: 1rem;
+      gap: 1.25rem;
+      min-height: 220px;
     }
 
     .tag {
       display: inline-block;
-      padding: 0.3rem 0.7rem;
-      background: #3b82f6;
-      border-radius: 999px;
       font-size: 0.75rem;
-      color: white;
-      margin-bottom: 0.5rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin-bottom: 0.35rem;
     }
 
-    ul {
-      padding-left: 1rem;
-      line-height: 1.5rem;
+    .joke-card h2 {
+      font-size: 1.3rem;
+      margin: 0 0 0.75rem;
+    }
+
+    #joke-text {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .btn-row {
+      margin-top: 0.75rem;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .btn {
+      background: #111827;
+      color: #f9fafb;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: background 0.15s ease, transform 0.1s ease,
+        box-shadow 0.1s ease;
+    }
+
+    .btn:hover {
+      background: #020617;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 12px rgba(15, 23, 42, 0.18);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    /* Right side*/
+    aside h3 {
+      font-size: 1.05rem;
+      margin: 0 0 0.9rem;
+    }
+
+    aside ul {
+      list-style: disc;
+      padding-left: 1.25rem;
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 0.85rem;
+      background: #e5e7eb;
+      padding: 0.05rem 0.3rem;
+      border-radius: 0.25rem;
     }
   </style>
 </head>
 <body>
 
-  <h1>Dad Joke Generator 🤣</h1>
+  <div class="shell">
+    <h1>Dad Joke Generator 🤣</h1>
+    <p class="subtitle">A small app that uses a public API, CSS Grid, and Popmotion.</p>
 
-  <main class="page">
+    <main class="page">
+      <!-- Left side : Joke + API + Animation -->
+      <section class="card joke-card" id="joke-card">
+        <div>
+          <div class="tag">API: icanhazdadjoke</div>
+          <h2>Random Dad Joke</h2>
+          <p id="joke-text">Loading a dad joke...</p>
+        </div>
 
-    <!-- LEFT SIDE: Joke + API + Animation -->
-    <section class="card joke-card" id="joke-card">
-      <div>
-        <div class="tag">API: icanhazdadjoke</div>
-        <h2>Random Dad Joke</h2>
-        <p id="joke-text">Loading a dad joke...</p>
-      </div>
+        <div class="btn-row">
+          <button class="btn" id="new-joke-btn">Get Another Joke</button>
+        </div>
+      </section>
 
-      <button class="btn" id="new-joke-btn">😂 Get Another Joke</button>
-    </section>
-
-    <!-- RIGHT SIDE: Assignment explanation -->
-    <aside class="card">
-      <h3>What This Project Demonstrates</h3>
-      <ul>
-        <li>✔ Uses a public API (<code>icanhazdadjoke.com</code>)</li>
-        <li>✔ Uses Popmotion animation</li>
-        <li>✔ Uses CSS Grid & Flexbox layouts</li>
-      </ul>
-    </aside>
-
-  </main>
+      <!-- right card -->
+      <aside class="card">
+        <h3>Some info on this project</h3>
+        <ul>
+          <li>It fetches data from <code>icanhazdadjoke.com</code> which is a public api.</li>
+          <li>It animates the joke card using Popmotion springs.</li>
+          <li>It uses <strong>CSS Grid</strong> for the two column layout.</li>
+          <li>Also uses <strong>Flexbox</strong> inside the joke card for spacing.</li>
+        </ul>
+      </aside>
+    </main>
+  </div>
 
   <script>
     const { styler, spring } = window.popmotion;
@@ -120,10 +195,10 @@
     const cardStyler = styler(card);
 
     function animateCard() {
-      cardStyler.set({ scale: 0.9, opacity: 0 });
+      cardStyler.set({ scale: 0.95, opacity: 0 });
 
       spring({
-        from: { scale: 0.9, opacity: 0 },
+        from: { scale: 0.95, opacity: 0 },
         to: { scale: 1, opacity: 1 },
         stiffness: 240,
         damping: 20
@@ -144,7 +219,7 @@
         animateCard();
 
       } catch (err) {
-        jokeText.textContent = "Couldn't load a joke 😢";
+        jokeText.textContent = "Couldn't load a joke ";
         console.error(err);
       }
     }
